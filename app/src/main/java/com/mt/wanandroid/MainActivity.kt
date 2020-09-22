@@ -1,25 +1,20 @@
 package com.mt.wanandroid
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.IBinder
 import android.util.Log
-import android.view.KeyEvent
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.mt.wanandroid.adapter.RepoItemAdapter
+import com.mt.wanandroid.adapter.PopularItemAdapter
 import com.mt.wanandroid.databinding.ActivityMainBinding
-import com.mt.wanandroid.viewmodel.RepoViewModel
+import com.mt.wanandroid.viewmodel.PopularViewModel
 
 class MainActivity : AppCompatActivity() {
 
     var binding: ActivityMainBinding? = null
-    var viewModel: RepoViewModel = RepoViewModel()
-    var adapter: RepoItemAdapter? = null
+    var viewModel: PopularViewModel = PopularViewModel()
+    var adapter: PopularItemAdapter? = null
 
     companion object {
         private const val TAG = "MainActivity"
@@ -31,23 +26,23 @@ class MainActivity : AppCompatActivity() {
         binding?.viewmodel = viewModel
         binding?.lifecycleOwner = this
 
-        initRepoRecyclerView()
+        initPopularRecyclerView()
 
         viewModel.refreshArticleList()
     }
 
-    private fun initRepoRecyclerView() {
-        adapter = RepoItemAdapter(true) {
+    private fun initPopularRecyclerView() {
+        adapter = PopularItemAdapter(true) {
             repo -> Log.e(TAG, ": MTMTMT " + repo.link)
         }
 
-        binding?.repoList?.adapter = adapter
+        binding?.popularList?.adapter = adapter
         viewModel.articleList.observe(this, {
             binding?.loading = false
             adapter?.submitList(it)
         })
 
-        binding?.repoList?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding?.popularList?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 val lastPosition = layoutManager.findLastVisibleItemPosition()

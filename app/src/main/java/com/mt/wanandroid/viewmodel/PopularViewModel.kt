@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
  * <a href="https://github.com/Crazy-MT">Follow me</a>
  * ================================================
  */
-class RepoViewModel : ViewModel() {
+class PopularViewModel : ViewModel() {
     val source = SearchSource()
     val articleList: MutableLiveData<MutableList<Article>> = MutableLiveData()
 

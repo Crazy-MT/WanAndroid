@@ -6,9 +6,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import com.mt.wanandroid.R
 import com.mt.wanandroid.common.DataBoundListAdapter
+import com.mt.wanandroid.databinding.ItemPopularBinding
 import com.mt.wanandroid.databinding.ItemRepoBinding
 import com.mt.wanandroid.model.Article
-import com.mt.wanandroid.model.Repo
 
 /**
  * ================================================
@@ -19,11 +19,11 @@ import com.mt.wanandroid.model.Repo
  * <a href="https://github.com/Crazy-MT">Follow me</a>
  * ================================================
  */
-class RepoItemAdapter(
+class PopularItemAdapter(
     private val showFullName: Boolean,
-    private val repoClickCallback: ((Article) -> Unit)?
+    private val articleClickCallback: ((Article) -> Unit)?
 ) :
-    DataBoundListAdapter<Article, ItemRepoBinding>(
+    DataBoundListAdapter<Article, ItemPopularBinding>(
         object : DiffUtil.ItemCallback<Article>() {
             override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
                 return oldItem.author == newItem.author
@@ -36,28 +36,28 @@ class RepoItemAdapter(
         }
     ) {
 
-    override fun createBinding(parent: ViewGroup): ItemRepoBinding {
+    override fun createBinding(parent: ViewGroup): ItemPopularBinding {
 
-        val binding =  DataBindingUtil.inflate<ItemRepoBinding>(
+        val binding =  DataBindingUtil.inflate<ItemPopularBinding>(
             LayoutInflater.from(parent.context),
-            R.layout.item_repo,
+            R.layout.item_popular,
             parent,
             false
         )
         binding.showFullName = showFullName
         binding.root.setOnClickListener{
             binding.article?.let {
-                repoClickCallback?.invoke(it)
+                articleClickCallback?.invoke(it)
             }
         }
         return binding
     }
 
-    override fun bind(binding: ItemRepoBinding, item: Article) {
+    override fun bind(binding: ItemPopularBinding, item: Article) {
         binding.article = item
     }
 
     companion object {
-        var TAG = "repo"
+        var TAG = "article"
     }
 }

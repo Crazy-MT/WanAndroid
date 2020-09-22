@@ -12,10 +12,8 @@ import com.mt.wanandroid.model.RepoSearchResponse
  * <a href="https://github.com/Crazy-MT">Follow me</a>
  * ================================================
  */
-class SearchSource{
-    private val api= Api.create()
+class SearchSource {
+    private val api = Api.create()
 
-//    suspend fun searchRepo(query: String) : MutableLiveData<ApiResponse<RepoSearchResponse>> {
-        suspend fun getTopArticleList() = api.getTopArticleList().apiData()
-//    }
+    suspend fun getTopArticleList() = api.getTopArticleList().apiData()
 }
