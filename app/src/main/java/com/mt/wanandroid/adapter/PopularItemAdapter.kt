@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import com.mt.wanandroid.R
 import com.mt.wanandroid.common.DataBoundListAdapter
 import com.mt.wanandroid.databinding.ItemPopularBinding
-import com.mt.wanandroid.databinding.ItemRepoBinding
 import com.mt.wanandroid.model.Article
 
 /**

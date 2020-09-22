@@ -33,10 +33,18 @@ class PopularViewModel : ViewModel() {
                 val topArticleListDefferd = async {
                     source.getTopArticleList()
                 }
+
+                val paginationDefferd = async {
+                    source.getArticleList(INITIAL_PAGE)
+                }
+
                 val topArticleList = topArticleListDefferd.await()
                     .apply { forEach { it.top = true } }
+                val pagination = paginationDefferd.await()
+
                 articleList.value = mutableListOf<Article>().apply {
                     addAll(topArticleList)
+                    addAll(pagination.datas)
                 }
             }.onSuccess {
             }.onFailure {
@@ -47,5 +55,6 @@ class PopularViewModel : ViewModel() {
 
     companion object {
         private const val TAG = "RepoViewModel"
+        const val INITIAL_PAGE = 0
     }
 }

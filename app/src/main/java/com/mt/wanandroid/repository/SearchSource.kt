@@ -16,4 +16,5 @@ class SearchSource {
     private val api = Api.create()
 
     suspend fun getTopArticleList() = api.getTopArticleList().apiData()
+    suspend fun getArticleList(page: Int) = api.getArticleList(page).apiData()
 }
