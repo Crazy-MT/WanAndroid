@@ -1,5 +1,6 @@
 package com.mt.wanandroid.api
 
+import com.mt.wanandroid.model.Article
 import com.mt.wanandroid.model.RepoSearchResponse
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
@@ -20,11 +21,11 @@ import retrofit2.http.Query
  */
 interface Api {
 
-    @GET("search/repositories")
-    suspend fun searchRepos(@Query("q") query: String): RepoSearchResponse
+    @GET("/article/top/json")
+    suspend fun getTopArticleList(): ApiResult<List<Article>>
 
     companion object {
-        private const val BASE_URL = "https://api.github.com/"
+        private const val BASE_URL = "https://www.wanandroid.com"
         fun create() : Api {
             val logger = HttpLoggingInterceptor()
             logger.level = HttpLoggingInterceptor.Level.BASIC

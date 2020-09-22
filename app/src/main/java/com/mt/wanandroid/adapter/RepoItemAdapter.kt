@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.mt.wanandroid.R
 import com.mt.wanandroid.common.DataBoundListAdapter
 import com.mt.wanandroid.databinding.ItemRepoBinding
+import com.mt.wanandroid.model.Article
 import com.mt.wanandroid.model.Repo
 
 /**
@@ -20,18 +21,17 @@ import com.mt.wanandroid.model.Repo
  */
 class RepoItemAdapter(
     private val showFullName: Boolean,
-    private val repoClickCallback: ((Repo) -> Unit)?
+    private val repoClickCallback: ((Article) -> Unit)?
 ) :
-    DataBoundListAdapter<Repo, ItemRepoBinding>(
-        object : DiffUtil.ItemCallback<Repo>() {
-            override fun areItemsTheSame(oldItem: Repo, newItem: Repo): Boolean {
-                return oldItem.owner == newItem.owner
-                        && oldItem.name == newItem.name
+    DataBoundListAdapter<Article, ItemRepoBinding>(
+        object : DiffUtil.ItemCallback<Article>() {
+            override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
+                return oldItem.author == newItem.author
+                        && oldItem.apkLink == newItem.apkLink
             }
 
-            override fun areContentsTheSame(oldItem: Repo, newItem: Repo): Boolean {
-                return oldItem.description == newItem.description
-                        && oldItem.stars == newItem.stars
+            override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
+                return oldItem.desc == newItem.desc
             }
         }
     ) {
@@ -46,15 +46,15 @@ class RepoItemAdapter(
         )
         binding.showFullName = showFullName
         binding.root.setOnClickListener{
-            binding.repo?.let {
+            binding.article?.let {
                 repoClickCallback?.invoke(it)
             }
         }
         return binding
     }
 
-    override fun bind(binding: ItemRepoBinding, item: Repo) {
-        binding.repo = item
+    override fun bind(binding: ItemRepoBinding, item: Article) {
+        binding.article = item
     }
 
     companion object {

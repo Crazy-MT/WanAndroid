@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mt.wanandroid.model.Article
 import com.mt.wanandroid.model.Repo
 import com.mt.wanandroid.repository.SearchSource
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 /**
@@ -19,40 +21,23 @@ import kotlinx.coroutines.launch
  */
 class RepoViewModel : ViewModel() {
     val source = SearchSource()
-    var repoSearchResp: MutableLiveData<List<Repo>> = MutableLiveData<List<Repo>>()
+    val articleList: MutableLiveData<MutableList<Article>> = MutableLiveData()
 
     init {
-        repoSearchResp.postValue(arrayListOf(Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1),
-            Repo(1, "name", "22", "desc", null, 1))
-        )
+//        repoSearchResp.postValue(arrayListOf(Repo(1, "name", "22", "desc", null, 1)))
     }
 
-    fun search(query: String) {
+    fun refreshArticleList() {
         viewModelScope.launch {
             runCatching {
-                repoSearchResp.postValue(source.searchRepo(query).items)
+                val topArticleListDefferd = async {
+                    source.getTopArticleList()
+                }
+                val topArticleList = topArticleListDefferd.await()
+                    .apply { forEach { it.top = true } }
+                articleList.value = mutableListOf<Article>().apply {
+                    addAll(topArticleList)
+                }
             }.onSuccess {
             }.onFailure {
                 Log.e(TAG, ": MTMTMT " + it.message + Thread.currentThread().name)

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.KeyEvent
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
@@ -32,18 +31,18 @@ class MainActivity : AppCompatActivity() {
         binding?.viewmodel = viewModel
         binding?.lifecycleOwner = this
 
-        initSerarchInputListener()
-
         initRepoRecyclerView()
+
+        viewModel.refreshArticleList()
     }
 
     private fun initRepoRecyclerView() {
         adapter = RepoItemAdapter(true) {
-            repo -> Log.e(TAG, ": MTMTMT " + repo.name)
+            repo -> Log.e(TAG, ": MTMTMT " + repo.link)
         }
 
         binding?.repoList?.adapter = adapter
-        viewModel.repoSearchResp.observe(this, {
+        viewModel.articleList.observe(this, {
             binding?.loading = false
             adapter?.submitList(it)
         })
@@ -55,38 +54,5 @@ class MainActivity : AppCompatActivity() {
                 binding?.loadingMore = lastPosition == adapter?.itemCount!! - 1
             }
         })
-    }
-
-    private fun initSerarchInputListener() {
-        binding?.input?.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                doSearch(v)
-                true
-            } else {
-                false
-            }
-        }
-
-        binding?.input?.setOnKeyListener { v, keyCode, event ->
-            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                doSearch(v)
-                true
-            } else {
-                false
-            }
-        }
-    }
-
-    private fun doSearch(v: View) {
-        val query = binding?.input?.text.toString()
-        dismissKeyboard(v.windowToken)
-        // viewModel 查询
-        viewModel.search(query)
-        binding?.loading = true
-    }
-
-    private fun dismissKeyboard(windowToken: IBinder?) {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        imm?.hideSoftInputFromWindow(windowToken, 0)
     }
 }

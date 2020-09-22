@@ -16,7 +16,6 @@ class SearchSource{
     private val api= Api.create()
 
 //    suspend fun searchRepo(query: String) : MutableLiveData<ApiResponse<RepoSearchResponse>> {
-        suspend fun searchRepo(query: String) : RepoSearchResponse {
-            return api.searchRepos(query)
-    }
+        suspend fun getTopArticleList() = api.getTopArticleList().apiData()
+//    }
 }
